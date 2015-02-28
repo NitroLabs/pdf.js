@@ -48,6 +48,7 @@ var ROOT_DIR = __dirname + '/', // absolute path to project's root
     LOCALE_SRC_DIR = 'l10n/',
     GH_PAGES_DIR = BUILD_DIR + 'gh-pages/',
     GENERIC_DIR = BUILD_DIR + 'generic/',
+    METEOR_DIR = BUILD_DIR + 'pdfjs/', 
     MINIFIED_DIR = BUILD_DIR + 'minified/',
     SINGLE_FILE_DIR = BUILD_DIR + 'singlefile/',
     COMPONENTS_DIR = BUILD_DIR + 'components/',
@@ -184,6 +185,54 @@ target.components = function() {
   cleanupJSSource(COMPONENTS_DIR + 'pdf_viewer.js');
   cleanupCSSSource(COMPONENTS_DIR + 'pdf_viewer.css');
 };
+
+//
+// make meteor
+// Builds the generic production viewer that is used in the 
+// maxkferg:pdfjs Meteor package
+//
+target.meteor = function() {
+  target.bundle({});
+  target.locale();
+
+  cd(ROOT_DIR);
+  echo();
+  echo('### Creating meteor viewer');
+  GENERIC_DIR = METEOR_DIR
+
+  rm('-rf', GENERIC_DIR);
+  mkdir('-p', GENERIC_DIR);
+  mkdir('-p', GENERIC_DIR + '/pdfjs');
+  mkdir('-p', GENERIC_DIR + '/pdfjs/cmaps');
+
+  var defines = builder.merge(DEFINES, {GENERIC: true});
+
+  var setup = {
+    defines: defines,
+    copy: [
+      [COMMON_WEB_FILES, GENERIC_DIR + '/pdfjs'],
+      ['LICENSE', GENERIC_DIR],
+      ['external/webL10n/l10n.js', GENERIC_DIR + '/pdfjs'],
+      ['web/compatibility.js', GENERIC_DIR + '/pdfjs'],
+      ['web/compressed.tracemonkey-pldi-09.pdf', GENERIC_DIR + '/pdfjs'],
+      ['external/bcmaps/*', GENERIC_DIR + '/pdfjs/cmaps/'],
+      ['web/locale', GENERIC_DIR + '/pdfjs']
+    ],
+    preprocess: [
+      [BUILD_TARGETS, GENERIC_DIR + '/pdfjs'],
+      [COMMON_WEB_FILES_PREPROCESS, GENERIC_DIR + '/pdfjs']
+    ],
+    preprocessCSS: [
+      ['generic', 'web/viewer.css',
+       GENERIC_DIR + '/pdfjs/viewer.css']
+    ]
+  };
+  builder.build(setup);
+
+  cleanupJSSource(GENERIC_DIR + '/pdfjs/viewer.js');
+  cleanupCSSSource(GENERIC_DIR + '/pdfjs/viewer.css');
+};
+
 
 target.jsdoc = function() {
   echo();
