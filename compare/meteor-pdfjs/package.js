@@ -4,9 +4,9 @@ var path = Npm.require('path');
 
 Package.describe({
   name: 'maxkferg:pdfjs',
-  version: '0.1.0',
-  summary: 'Custom build of pdfjs, wrapped in a meteor package',
-  git: 'https://github.com/NitroLabs/pdf.js',
+  version: '0.0.1',
+  summary: 'Wraps nitrolabs:pdfjs in a meteor package',
+  git: '',
   documentation: 'README.md'
 });
 
