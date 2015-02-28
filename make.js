@@ -192,48 +192,51 @@ target.components = function() {
 // maxkferg:pdfjs Meteor package
 //
 target.meteor = function() {
+  var LIB_DIR = METEOR_DIR + 'meteor';
+  GENERIC_DIR = METEOR_DIR
+  
   target.bundle({});
   target.locale();
 
   cd(ROOT_DIR);
   echo();
   echo('### Creating meteor viewer');
-  GENERIC_DIR = METEOR_DIR
 
-  rm('-rf', GENERIC_DIR);
-  mkdir('-p', GENERIC_DIR);
-  mkdir('-p', GENERIC_DIR + '/pdfjs');
-  mkdir('-p', GENERIC_DIR + '/pdfjs/cmaps');
+
+  rm('-rf', METEOR_DIR);
+  mkdir('-p', METEOR_DIR);
+  mkdir('-p', LIB_DIR);
+  mkdir('-p', LIB_DIR + '/cmaps');
 
   var defines = builder.merge(DEFINES, {GENERIC: true});
 
   var setup = {
     defines: defines,
     copy: [
-      [COMMON_WEB_FILES, GENERIC_DIR + '/pdfjs'],
+      [COMMON_WEB_FILES, LIB_DIR],
       ['LICENSE', GENERIC_DIR],
-      ['external/webL10n/l10n.js', GENERIC_DIR + '/pdfjs'],
-      ['web/compatibility.js', GENERIC_DIR + '/pdfjs'],
-      ['web/compressed.tracemonkey-pldi-09.pdf', GENERIC_DIR + '/pdfjs'],
-      ['external/bcmaps/*', GENERIC_DIR + '/pdfjs/cmaps/'],
-      ['web/locale', GENERIC_DIR + '/pdfjs'],
-      ['meteor/package.js', GENERIC_DIR],
-      ['meteor/pdfjs-tests.js', GENERIC_DIR],
-      ['meteor/README.md', GENERIC_DIR]
+      ['external/webL10n/l10n.js', LIB_DIR],
+      ['web/compatibility.js', LIB_DIR],
+      ['web/compressed.tracemonkey-pldi-09.pdf', LIB_DIR],
+      ['external/bcmaps/*', LIB_DIR + '/cmaps/'],
+      ['web/locale', LIB_DIR],
+      ['meteor/package.js', METEOR_DIR],
+      ['meteor/pdfjs-tests.js', METEOR_DIR],
+      ['meteor/README.md', METEOR_DIR]
     ],
     preprocess: [
-      [BUILD_TARGETS, GENERIC_DIR + '/pdfjs'],
-      [COMMON_WEB_FILES_PREPROCESS, GENERIC_DIR + '/pdfjs']
+      [BUILD_TARGETS, LIB_DIR],
+      [COMMON_WEB_FILES_PREPROCESS, LIB_DIR]
     ],
     preprocessCSS: [
       ['generic', 'web/viewer.css',
-       GENERIC_DIR + '/pdfjs/viewer.css']
+       LIB_DIR + '/viewer.css']
     ]
   };
   builder.build(setup);
 
-  cleanupJSSource(GENERIC_DIR + '/pdfjs/viewer.js');
-  cleanupCSSSource(GENERIC_DIR + '/pdfjs/viewer.css');
+  cleanupJSSource(LIB_DIR + '/viewer.js');
+  cleanupCSSSource(LIB_DIR + '/viewer.css');
 };
 
 
