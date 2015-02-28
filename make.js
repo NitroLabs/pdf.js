@@ -48,7 +48,7 @@ var ROOT_DIR = __dirname + '/', // absolute path to project's root
     LOCALE_SRC_DIR = 'l10n/',
     GH_PAGES_DIR = BUILD_DIR + 'gh-pages/',
     GENERIC_DIR = BUILD_DIR + 'generic/',
-    METEOR_DIR = BUILD_DIR + 'pdfjs/', 
+    METEOR_DIR = BUILD_DIR + 'meteor-pdfjs/', 
     MINIFIED_DIR = BUILD_DIR + 'minified/',
     SINGLE_FILE_DIR = BUILD_DIR + 'singlefile/',
     COMPONENTS_DIR = BUILD_DIR + 'components/',
@@ -216,7 +216,10 @@ target.meteor = function() {
       ['web/compatibility.js', GENERIC_DIR + '/pdfjs'],
       ['web/compressed.tracemonkey-pldi-09.pdf', GENERIC_DIR + '/pdfjs'],
       ['external/bcmaps/*', GENERIC_DIR + '/pdfjs/cmaps/'],
-      ['web/locale', GENERIC_DIR + '/pdfjs']
+      ['web/locale', GENERIC_DIR + '/pdfjs'],
+      ['meteor/package.js', GENERIC_DIR],
+      ['meteor/pdfjs-tests.js', GENERIC_DIR],
+      ['meteor/README.md', GENERIC_DIR]
     ],
     preprocess: [
       [BUILD_TARGETS, GENERIC_DIR + '/pdfjs'],
